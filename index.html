@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Frame.io Comment Sync - Chrome Extension</title>
+    <meta name="description" content="Powerful Chrome extension that revolutionizes video review workflows by enabling bulk import of comments from CSV files directly into Frame.io video timelines.">
+    <meta name="keywords" content="Frame.io, Chrome Extension, Video Review, CSV Import, Video Production, Workflow, Comments">
+    <meta name="author" content="cHAuHaN">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://cHAuHaNz.github.io/Frame.io-Comments-Sync/">
+    <meta property="og:title" content="Frame.io Comment Sync - Chrome Extension">
+    <meta property="og:description" content="Streamline your video review workflow with seamless CSV comment integration">
+    <meta property="og:image" content="https://cHAuHaNz.github.io/Frame.io-Comments-Sync/assets/og-image.jpg">
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://cHAuHaNz.github.io/Frame.io-Comments-Sync/">
+    <meta property="twitter:title" content="Frame.io Comment Sync - Chrome Extension">
+    <meta property="twitter:description" content="Streamline your video review workflow with seamless CSV comment integration">
+    <meta property="twitter:image" content="https://cHAuHaNz.github.io/Frame.io-Comments-Sync/assets/og-image.jpg">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" sizes="32x32" href="icon32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="icon16.png">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <!-- Styles -->
+    <link rel="stylesheet" href="styles.css">
+    
+    <!-- Schema.org markup -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "SoftwareApplication",
+        "name": "Frame.io Comment Sync",
+        "description": "Chrome extension for bulk importing CSV comments into Frame.io video timelines",
+        "applicationCategory": "BrowserApplication",
+        "operatingSystem": "Chrome",
+        "offers": {
+            "@type": "Offer",
+            "price": "0",
+            "priceCurrency": "INR"
+        },
+        "author": {
+            "@type": "Person",
+            "name": "cHAuHaN",
+            "url": "https://www.linkedin.com/in/amnd33p/"
+        }
+    }
+    </script>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar" id="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <div class="logo-icon">
+                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M3.23165 20.47C4.26493 17.8504 4.81795 14.9834 4.81795 12C4.81795 9.01659 4.27221 6.14961 3.23165 3.53003C3.18072 3.39905 3.15161 3.24624 3.15161 3.09343C3.15161 2.47492 3.63187 1.89279 4.31587 1.89279C4.75247 1.89279 5.16723 2.16203 5.33459 2.57679C6.46974 5.49471 7.10281 8.66731 7.10281 12C7.10281 15.3181 6.46974 18.5053 5.33459 21.4232C5.16723 21.838 4.75247 22.1072 4.31587 22.1072C3.63187 22.1072 3.15161 21.5251 3.15161 20.9066C3.15161 20.7538 3.18799 20.6082 3.23165 20.47Z" fill="currentColor"/>
+                        <path d="M8.67457 18.3525C9.14027 16.315 9.39495 14.183 9.39495 12C9.39495 9.81701 9.14755 7.67769 8.67457 5.63296C8.66001 5.55292 8.63818 5.45105 8.63818 5.36373C8.63818 4.73067 9.14027 4.17764 9.80244 4.17764C10.3045 4.17764 10.7557 4.52692 10.8721 5.02901C11.4033 7.26292 11.6871 9.59872 11.6871 12C11.6871 14.4013 11.4033 16.7371 10.8721 18.971C10.7557 19.4731 10.3045 19.8224 9.80244 19.8224C9.13299 19.8224 8.63818 19.2548 8.63818 18.6217C8.63818 18.5344 8.65274 18.4398 8.67457 18.3525Z" fill="currentColor"/>
+                        <path d="M13.972 12C13.972 10.9522 13.9211 9.93345 13.8192 8.91473C13.7537 8.21617 14.2849 7.61221 14.9689 7.61221C15.551 7.61221 16.0386 8.04881 16.0895 8.61639C16.2059 9.73698 16.2569 10.8503 16.2569 12C16.2569 13.1352 16.2059 14.2703 16.0895 15.3836C16.0386 15.9512 15.5583 16.3878 14.9689 16.3878C14.2849 16.3878 13.7537 15.7693 13.8192 15.0853C13.9211 14.0666 13.972 13.0333 13.972 12Z" fill="currentColor"/>
+                        <path d="M20.8482 12C20.8482 12.2838 20.7318 12.5821 20.5135 12.8004L19.8441 13.4699C19.6913 13.6227 19.4948 13.6882 19.3129 13.6882C18.9272 13.6882 18.5488 13.3898 18.5488 12.9241V11.0904C18.5488 10.6247 18.9345 10.3264 19.3129 10.3264C19.4948 10.3264 19.6985 10.3919 19.8441 10.5447L20.5135 11.1923C20.7318 11.396 20.8482 11.7017 20.8482 12Z" fill="currentColor"/>
+                    </svg>
+                </div>
+                <span class="logo-text">Frame.io Comment Sync</span>
+            </div>
+            <div class="nav-menu" id="nav-menu">
+                <a href="#home" class="nav-link">Home</a>
+                <a href="#features" class="nav-link">Features</a>
+                <a href="#installation" class="nav-link">Installation</a>
+                <a href="#demo" class="nav-link">Demo</a>
+                <a href="#support" class="nav-link">Support</a>
+            </div>
+            <div class="nav-cta">
+                <a href="https://github.com/cHAuHaNz/Frame.io-Comments-Sync" class="btn btn-outline" target="_blank">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path fill-rule="evenodd" clip-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" fill="currentColor"/>
+                    </svg>
+                    GitHub
+                </a>
+                <a href="#installation" class="btn btn-primary">Install Now</a>
+            </div>
+            <div class="hamburger" id="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <div class="hero-background"></div>
+        <div class="container">
+            <div class="hero-content">
+                <div class="hero-text">
+                    <div class="hero-badge">
+                        <span class="badge-icon">✨</span>
+                        <span>Chrome Extension</span>
+                    </div>
+                    <h1 class="hero-title">
+                        Revolutionize Your
+                        <span class="gradient-text">Video Review</span>
+                        Workflow
+                    </h1>
+                    <p class="hero-description">
+                        Streamline your Frame.io workflow with seamless CSV comment integration. 
+                        Upload, manage, and sync hundreds of timestamped comments with just a few clicks.
+                        <strong>Currently supports 30 FPS videos.</strong>
+                    </p>
+                    <div class="hero-cta">
+                        <a href="#installation" class="btn btn-primary btn-large" data-feature="source-code">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M21 15V19C21 19.5304 20.7893 20.0391 20.4142 20.4142C20.0391 20.7893 19.5304 21 19 21H5C4.46957 21 3.96086 20.7893 3.58579 20.4142C3.21071 20.0391 3 19.5304 3 19V15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M7 10L12 15L17 10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M12 15V3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                            Install Extension
+                        </a>
+                        <a href="#installation" class="btn btn-primary btn-large" data-feature-alt="source-code" style="display: none;">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M15 17H20L18.59 15.59C19.96 14.09 20.76 12.14 20.76 10C20.76 5.58 17.18 2 12.76 2C8.34 2 4.76 5.58 4.76 10C4.76 14.42 8.34 18 12.76 18C14.9 18 16.85 17.2 18.35 15.83L19.76 17.24L21.17 15.83L15 17Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M11 6V10L15 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                            Get Notified
+                        </a>
+                        <a href="#demo" class="btn btn-outline btn-large">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <polygon points="5,3 19,12 5,21" fill="currentColor"/>
+                            </svg>
+                            Watch Demo
+                        </a>
+                    </div>
+                    <div class="hero-stats">
+                        <div class="stat">
+                            <div class="stat-number">100x</div>
+                            <div class="stat-label">Faster Workflow</div>
+                        </div>
+                        <div class="stat">
+                            <div class="stat-number">1000+</div>
+                            <div class="stat-label">Comments/Batch</div>
+                        </div>
+                        <div class="stat">
+                            <div class="stat-number">30fps</div>
+                            <div class="stat-label">Frame Accuracy</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="hero-visual">
+                    <div class="hero-card">
+                        <div class="card-header">
+                            <div class="card-title">📋 CSV Comments</div>
+                            <div class="card-badge">Ready to Import</div>
+                        </div>
+                        <div class="card-content">
+                            <div class="csv-preview">
+                                <div class="csv-row header">
+                                    <span>Timecode</span>
+                                    <span>Comment</span>
+                                    <span>Status</span>
+                                </div>
+                                <div class="csv-row">
+                                    <span>00:00:15:00</span>
+                                    <span>Great opening shot!</span>
+                                    <span class="status">✅</span>
+                                </div>
+                                <div class="csv-row">
+                                    <span>00:00:30:15</span>
+                                    <span>Adjust lighting here</span>
+                                    <span class="status">⚡</span>
+                                </div>
+                                <div class="csv-row">
+                                    <span>00:01:05:22</span>
+                                    <span>Perfect timing on cut</span>
+                                    <span class="status">✅</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="hero-particles"></div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features" id="features">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Powerful Features</h2>
+                <p class="section-description">Everything you need to supercharge your video review process</p>
+            </div>
+            <div class="features-grid">
+                <div class="feature-card" data-aos="fade-up" data-aos-delay="0">
+                    <div class="feature-icon">
+                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M14 2H6C5.46957 2 4.96086 2.21071 4.58579 2.58579C4.21071 2.96086 4 3.46957 4 4V20C4 20.5304 4.21071 21.0391 4.58579 21.4142C4.96086 21.7893 5.46957 22 6 22H18C18.5304 22 19.0391 21.7893 19.4142 21.4142C19.7893 21.0391 20 20.5304 20 20V8L14 2Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M14 2V8H20" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M16 13H8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M16 17H8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M10 9H8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </div>
+                    <h3 class="feature-title">CSV Import</h3>
+                    <p class="feature-description">Upload pre-prepared comments with precise timecode targeting. Supports annotation flags and reply threading.</p>
+                </div>
+                
+                <div class="feature-card" data-aos="fade-up" data-aos-delay="100">
+                    <div class="feature-icon">
+                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M4 12V8C4 6.89543 4.89543 6 6 6H18C19.1046 6 20 6.89543 20 8V12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M4 12C4 13.1046 4.89543 14 6 14H18C19.1046 14 20 13.1046 20 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M4 12V16C4 17.1046 4.89543 18 6 18H18C19.1046 18 20 17.1046 20 16V12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </div>
+                    <h3 class="feature-title">Bulk Operations</h3>
+                    <p class="feature-description">Add hundreds of comments to your timeline with a single action. Smart filtering and sequential processing.</p>
+                </div>
+                
+                <div class="feature-card" data-aos="fade-up" data-aos-delay="200">
+                    <div class="feature-icon">
+                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M2 3H8C9.1046 3 10 3.89543 10 5V19C10 20.1046 9.1046 21 8 21H2" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M22 3H16C14.8954 3 14 3.89543 14 5V19C14 20.1046 14.8954 21 16 21H22" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M10 12H14" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </div>
+                    <h3 class="feature-title">Floating Sidebar</h3>
+                    <p class="feature-description">Persistent comment management interface that stays open while you work. Minimizable and draggable design.</p>
+                </div>
+                
+                <div class="feature-card" data-aos="fade-up" data-aos-delay="300">
+                    <div class="feature-icon">
+                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/>
+                            <path d="M12 6V12L16 14" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </div>
+                    <h3 class="feature-title">Timecode Navigation</h3>
+                    <p class="feature-description">Jump directly to any timestamp in your video. Frame-accurate seeking with 30fps precision.</p>
+                </div>
+                
+                <div class="feature-card" data-aos="fade-up" data-aos-delay="400">
+                    <div class="feature-icon">
+                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M6 2L3 6V20C3 21.1046 3.89543 22 5 22H19C20.1046 22 21 21.1046 21 20V6L18 2H6Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M3.8 6H20.2" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M16 10C16 11.1046 15.1046 12 14 12H10C8.89543 12 8 11.1046 8 10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </div>
+                    <h3 class="feature-title">Smart Filtering</h3>
+                    <p class="feature-description">Filter comments by annotation status, reply type, and custom criteria. Advanced search and organization.</p>
+                </div>
+                
+                <div class="feature-card" data-aos="fade-up" data-aos-delay="500">
+                    <div class="feature-icon">
+                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" stroke="currentColor" stroke-width="2"/>
+                            <path d="M9 12L11 14L15 10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </div>
+                    <h3 class="feature-title">Audio Feedback</h3>
+                    <p class="feature-description">Success notifications with completion sounds. Visual progress indicators and real-time status updates.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Installation Section -->
+    <section class="installation" id="installation">
+        <div class="container">
+            <div class="installation-content">
+                <div class="installation-text">
+                    <h2 class="section-title" data-feature="source-code">Easy Installation</h2>
+                    <h2 class="section-title" data-feature-alt="source-code" style="display: none;">Get Notified</h2>
+                    <p class="section-description" data-feature="source-code">Get started in just a few clicks</p>
+                    <p class="section-description" data-feature-alt="source-code" style="display: none;">Stay updated on the extension release and join our community</p>
+                    
+                    <div class="installation-methods">
+                        <div class="method">
+                            <div class="method-header">
+                                <div class="method-icon">🏪</div>
+                                <h3>Chrome Web Store (Coming Soon)</h3>
+                            </div>
+                            <div class="method-content">
+                                <p>One-click installation from the official Chrome Web Store.</p>
+                                <a href="#" class="btn btn-primary disabled">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M21 15V19C21 19.5304 20.7893 20.0391 20.4142 20.4142C20.0391 20.7893 19.5304 21 19 21H5C4.46957 21 3.96086 20.7893 3.58579 20.4142C3.21071 20.0391 3 19.5304 3 19V15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                        <path d="M7 10L12 15L17 10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                        <path d="M12 15V3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                    </svg>
+                                    Under Review
+                                </a>
+                            </div>
+                        </div>
+                        
+                        <div class="method active" data-feature="source-code">
+                            <div class="method-header">
+                                <div class="method-icon">⚡</div>
+                                <h3>Manual Installation (Available Now)</h3>
+                            </div>
+                            <div class="method-content">
+                                <div class="steps">
+                                    <div class="step">
+                                        <div class="step-number">1</div>
+                                        <div class="step-content">
+                                            <h4>Download from GitHub</h4>
+                                            <p>Clone or download the repository</p>
+                                            <code>git clone https://github.com/cHAuHaNz/Frame.io-Comments-Sync.git</code>
+                                        </div>
+                                    </div>
+                                    <div class="step">
+                                        <div class="step-number">2</div>
+                                        <div class="step-content">
+                                            <h4>Enable Developer Mode</h4>
+                                            <p>Go to <code>chrome://extensions/</code> and toggle "Developer mode"</p>
+                                        </div>
+                                    </div>
+                                    <div class="step">
+                                        <div class="step-number">3</div>
+                                        <div class="step-content">
+                                            <h4>Load Extension</h4>
+                                            <p>Click "Load unpacked" and select the <code>Frame.io-Comments-Sync</code> folder</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <a href="https://github.com/cHAuHaNz/Frame.io-Comments-Sync/archive/refs/heads/main.zip" class="btn btn-primary">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M21 15V19C21 19.5304 20.7893 20.0391 20.4142 20.4142C20.0391 20.7893 19.5304 21 19 21H5C4.46957 21 3.96086 20.7893 3.58579 20.4142C3.21071 20.0391 3 19.5304 3 19V15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                        <path d="M7 10L12 15L17 10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                        <path d="M12 15V3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                    </svg>
+                                    Download ZIP
+                                </a>
+                            </div>
+                        </div>
+                        
+                        <!-- Alternative content when source code is not available -->
+                        <div class="method community-engagement" data-feature-alt="source-code" style="display: none;">
+                            <div class="method-header">
+                                <div class="method-icon">🤝</div>
+                                <h3>Join Our Community</h3>
+                            </div>
+                            <div class="method-content">
+                                <p>While we prepare the extension for public release, join our community to stay updated and provide feedback.</p>
+                                <div class="community-actions">
+                                    <a href="https://github.com/cHAuHaNz/Frame.io-Comments-Sync/discussions" class="btn btn-outline">
+                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <path d="M21 11.5C21.0034 12.8199 20.6951 14.1219 20.1 15.3C19.3944 16.7118 18.3098 17.8992 16.9674 18.7293C15.6251 19.5594 14.0782 19.9994 12.5 20C11.1801 20.0035 9.87812 19.6951 8.7 19.1L3 21L4.9 15.3C4.30493 14.1219 3.99656 12.8199 4 11.5C4.00061 9.92179 4.44061 8.37488 5.27072 7.03258C6.10083 5.69028 7.28825 4.60561 8.7 3.90003C9.87812 3.30496 11.1801 2.99659 12.5 3.00003H13C15.0843 3.11502 17.053 3.99479 18.5291 5.47089C20.0052 6.94699 20.885 8.91568 21 11V11.5Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                        </svg>
+                                        Join Discussions
+                                    </a>
+                                    <a href="https://github.com/cHAuHaNz/Frame.io-Comments-Sync/issues" class="btn btn-outline">
+                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <path d="M9 12L11 14L15 10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                            <path d="M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z" stroke="currentColor" stroke-width="2"/>
+                                        </svg>
+                                        Report Issues
+                                    </a>
+                                </div>
+                                <div class="engagement-notice">
+                                    <div class="notice-icon">📢</div>
+                                    <p>Get notified when the extension becomes available by starring the repository and watching for updates!</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="installation-visual">
+                    <div class="browser-mockup">
+                        <div class="browser-header">
+                            <div class="browser-buttons">
+                                <span class="btn-close"></span>
+                                <span class="btn-minimize"></span>
+                                <span class="btn-maximize"></span>
+                            </div>
+                            <div class="browser-url">chrome://extensions/</div>
+                        </div>
+                        <div class="browser-content">
+                            <div class="extension-card">
+                                <div class="extension-icon">
+                                    <svg width="48" height="48" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M3.23165 20.47C4.26493 17.8504 4.81795 14.9834 4.81795 12C4.81795 9.01659 4.27221 6.14961 3.23165 3.53003C3.18072 3.39905 3.15161 3.24624 3.15161 3.09343C3.15161 2.47492 3.63187 1.89279 4.31587 1.89279C4.75247 1.89279 5.16723 2.16203 5.33459 2.57679C6.46974 5.49471 7.10281 8.66731 7.10281 12C7.10281 15.3181 6.46974 18.5053 5.33459 21.4232C5.16723 21.838 4.75247 22.1072 4.31587 22.1072C3.63187 22.1072 3.15161 21.5251 3.15161 20.9066C3.15161 20.7538 3.18799 20.6082 3.23165 20.47Z" fill="#5B53FF"/>
+                                        <path d="M8.67457 18.3525C9.14027 16.315 9.39495 14.183 9.39495 12C9.39495 9.81701 9.14755 7.67769 8.67457 5.63296C8.66001 5.55292 8.63818 5.45105 8.63818 5.36373C8.63818 4.73067 9.14027 4.17764 9.80244 4.17764C10.3045 4.17764 10.7557 4.52692 10.8721 5.02901C11.4033 7.26292 11.6871 9.59872 11.6871 12C11.6871 14.4013 11.4033 16.7371 10.8721 18.971C10.7557 19.4731 10.3045 19.8224 9.80244 19.8224C9.13299 19.8224 8.63818 19.2548 8.63818 18.6217C8.63818 18.5344 8.65274 18.4398 8.67457 18.3525Z" fill="#5B53FF"/>
+                                        <path d="M13.972 12C13.972 10.9522 13.9211 9.93345 13.8192 8.91473C13.7537 8.21617 14.2849 7.61221 14.9689 7.61221C15.551 7.61221 16.0386 8.04881 16.0895 8.61639C16.2059 9.73698 16.2569 10.8503 16.2569 12C16.2569 13.1352 16.2059 14.2703 16.0895 15.3836C16.0386 15.9512 15.5583 16.3878 14.9689 16.3878C14.2849 16.3878 13.7537 15.7693 13.8192 15.0853C13.9211 14.0666 13.972 13.0333 13.972 12Z" fill="#5B53FF"/>
+                                        <path d="M20.8482 12C20.8482 12.2838 20.7318 12.5821 20.5135 12.8004L19.8441 13.4699C19.6913 13.6227 19.4948 13.6882 19.3129 13.6882C18.9272 13.6882 18.5488 13.3898 18.5488 12.9241V11.0904C18.5488 10.6247 18.9345 10.3264 19.3129 10.3264C19.4948 10.3264 19.6985 10.3919 19.8441 10.5447L20.5135 11.1923C20.7318 11.396 20.8482 11.7017 20.8482 12Z" fill="#5B53FF"/>
+                                    </svg>
+                                </div>
+                                <div class="extension-info">
+                                    <h3>Frame.io Comment Sync</h3>
+                                    <p>Version 1.0</p>
+                                    <div class="extension-status">
+                                        <span class="status-indicator active"></span>
+                                        <span>Enabled</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Demo Section -->
+    <section class="demo" id="demo">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">See It In Action</h2>
+                <p class="section-description">Watch how easy it is to transform your video review workflow</p>
+            </div>
+            
+            <div class="demo-content">
+                <div class="demo-video">
+                    <div class="video-placeholder">
+                        <div class="play-button">
+                            <svg width="64" height="64" viewBox="0 0 20 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <polygon points="5,3 19,12 5,21" fill="currentColor"/>
+                            </svg>
+                        </div>
+                        <div class="video-overlay">
+                            <h3>Demo Video Coming Soon</h3>
+                            <p>Interactive demo showcasing all features</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="demo-steps">
+                    <div class="demo-step">
+                        <div class="step-icon">📄</div>
+                        <h3>Upload CSV</h3>
+                        <p>Select your pre-prepared CSV file with timecodes and comments</p>
+                    </div>
+                    <div class="step-arrow">→</div>
+                    <div class="demo-step">
+                        <div class="step-icon">📋</div>
+                        <h3>Review Comments</h3>
+                        <p>View and filter comments in the floating sidebar interface</p>
+                    </div>
+                    <div class="step-arrow">→</div>
+                    <div class="demo-step">
+                        <div class="step-icon">⚡</div>
+                        <h3>Bulk Import</h3>
+                        <p>Add all comments to Frame.io timeline with one click</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Support Section -->
+    <section class="support" id="support">
+        <div class="container">
+            <div class="support-content">
+                <div class="support-text">
+                    <h2 class="section-title">Need Help?</h2>
+                    <p class="section-description">Get support, report issues, or contribute to the project</p>
+                    
+                    <div class="support-options">
+                        <a href="https://github.com/cHAuHaNz/Frame.io-Comments-Sync/issues" class="support-card" target="_blank">
+                            <div class="support-icon">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M9 12L11 14L15 10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                    <path d="M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z" stroke="currentColor" stroke-width="2"/>
+                                </svg>
+                            </div>
+                            <div class="support-content">
+                                <h3>Report Issues</h3>
+                                <p>Found a bug? Let us know on GitHub Issues</p>
+                            </div>
+                        </a>
+                        
+                        <a href="https://github.com/cHAuHaNz/Frame.io-Comments-Sync/discussions" class="support-card" target="_blank">
+                            <div class="support-icon">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M21 11.5C21.0034 12.8199 20.6951 14.1219 20.1 15.3C19.3944 16.7118 18.3098 17.8992 16.9674 18.7293C15.6251 19.5594 14.0782 19.9994 12.5 20C11.1801 20.0035 9.87812 19.6951 8.7 19.1L3 21L4.9 15.3C4.30493 14.1219 3.99656 12.8199 4 11.5C4.00061 9.92179 4.44061 8.37488 5.27072 7.03258C6.10083 5.69028 7.28825 4.60561 8.7 3.90003C9.87812 3.30496 11.1801 2.99659 12.5 3.00003H13C15.0843 3.11502 17.053 3.99479 18.5291 5.47089C20.0052 6.94699 20.885 8.91568 21 11V11.5Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                            </div>
+                            <div class="support-content">
+                                <h3>Discussions</h3>
+                                <p>Join the community discussions and Q&A</p>
+                            </div>
+                        </a>
+                        
+                        <a href="https://www.linkedin.com/in/amnd33p/" class="support-card" target="_blank">
+                            <div class="support-icon">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M16 8C17.5913 8 19.1174 8.63214 20.2426 9.75736C21.3679 10.8826 22 12.4087 22 14V21H18V14C18 13.4696 17.7893 12.9609 17.4142 12.5858C17.0391 12.2107 16.5304 12 16 12C15.4696 12 14.9609 12.2107 14.5858 12.5858C14.2107 12.9609 14 13.4696 14 14V21H10V14C10 12.4087 10.6321 10.8826 11.7574 9.75736C12.8826 8.63214 14.4087 8 16 8V8Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                    <path d="M6 9H2V21H6V9Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                    <path d="M4 6C5.10457 6 6 5.10457 6 4C6 2.89543 5.10457 2 4 2C2.89543 2 2 2.89543 2 4C2 5.10457 2.89543 6 4 6Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                            </div>
+                            <div class="support-content">
+                                <h3>Contact Developer</h3>
+                                <p>Connect with cHAuHaN on LinkedIn</p>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="developer-card">
+                    <div class="developer-avatar">
+                    <img src="https://avatars.githubusercontent.com/u/41383761?v=4" alt="cHAuHaN Avatar" class="avatar-placeholder avatar-image" style="object-fit:cover;">
+                    </div>
+                    <div class="developer-info">
+                        <h3>cHAuHaN</h3>
+                        <p>Software Engineer</p>
+                        <div class="social-links">
+                            <a href="https://github.com/cHAuHaNz" target="_blank" class="social-link">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path fill-rule="evenodd" clip-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" fill="currentColor"/>
+                                </svg>
+                            </a>
+                            <a href="https://www.linkedin.com/in/amnd33p/" target="_blank" class="social-link">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M16 8C17.5913 8 19.1174 8.63214 20.2426 9.75736C21.3679 10.8826 22 12.4087 22 14V21H18V14C18 13.4696 17.7893 12.9609 17.4142 12.5858C17.0391 12.2107 16.5304 12 16 12C15.4696 12 14.9609 12.2107 14.5858 12.5858C14.2107 12.9609 14 13.4696 14 14V21H10V14C10 12.4087 10.6321 10.8826 11.7574 9.75736C12.8826 8.63214 14.4087 8 16 8V8Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                    <path d="M6 9H2V21H6V9Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                    <path d="M4 6C5.10457 6 6 5.10457 6 4C6 2.89543 5.10457 2 4 2C2.89543 2 2 4C2 5.10457 2.89543 6 4 6Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                            </a>
+                            <a href="https://twitter.com/cH4uHaN" target="_blank" class="social-link">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M23 3C22.0424 3.67548 20.9821 4.19211 19.86 4.53C19.2577 3.83751 18.4573 3.34669 17.567 3.12393C16.6767 2.90116 15.7395 2.95718 14.8821 3.28445C14.0247 3.61173 13.2884 4.19445 12.773 4.95371C12.2575 5.71297 11.9877 6.61435 12 7.53V8.53C10.2426 8.57557 8.50127 8.18581 6.93101 7.39624C5.36074 6.60667 4.01032 5.43666 3 4C3 4 -1 13 8 17C5.94053 18.398 3.48716 19.099 1 19C10 24 21 19 21 7.5C20.9991 7.22145 20.9723 6.943 20.92 6.67C21.9406 5.66349 22.6608 4.39271 23 3V3Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-main">
+                    <div class="footer-logo">
+                        <div class="logo-icon">
+                            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M3.23165 20.47C4.26493 17.8504 4.81795 14.9834 4.81795 12C4.81795 9.01659 4.27221 6.14961 3.23165 3.53003C3.18072 3.39905 3.15161 3.24624 3.15161 3.09343C3.15161 2.47492 3.63187 1.89279 4.31587 1.89279C4.75247 1.89279 5.16723 2.16203 5.33459 2.57679C6.46974 5.49471 7.10281 8.66731 7.10281 12C7.10281 15.3181 6.46974 18.5053 5.33459 21.4232C5.16723 21.838 4.75247 22.1072 4.31587 22.1072C3.63187 22.1072 3.15161 21.5251 3.15161 20.9066C3.15161 20.7538 3.18799 20.6082 3.23165 20.47Z" fill="currentColor"/>
+                                <path d="M8.67457 18.3525C9.14027 16.315 9.39495 14.183 9.39495 12C9.39495 9.81701 9.14755 7.67769 8.67457 5.63296C8.66001 5.55292 8.63818 5.45105 8.63818 5.36373C8.63818 4.73067 9.14027 4.17764 9.80244 4.17764C10.3045 4.17764 10.7557 4.52692 10.8721 5.02901C11.4033 7.26292 11.6871 9.59872 11.6871 12C11.6871 14.4013 11.4033 16.7371 10.8721 18.971C10.7557 19.4731 10.3045 19.8224 9.80244 19.8224C9.13299 19.8224 8.63818 19.2548 8.63818 18.6217C8.63818 18.5344 8.65274 18.4398 8.67457 18.3525Z" fill="currentColor"/>
+                                <path d="M13.972 12C13.972 10.9522 13.9211 9.93345 13.8192 8.91473C13.7537 8.21617 14.2849 7.61221 14.9689 7.61221C15.551 7.61221 16.0386 8.04881 16.0895 8.61639C16.2059 9.73698 16.2569 10.8503 16.2569 12C16.2569 13.1352 16.2059 14.2703 16.0895 15.3836C16.0386 15.9512 15.5583 16.3878 14.9689 16.3878C14.2849 16.3878 13.7537 15.7693 13.8192 15.0853C13.9211 14.0666 13.972 13.0333 13.972 12Z" fill="currentColor"/>
+                                <path d="M20.8482 12C20.8482 12.2838 20.7318 12.5821 20.5135 12.8004L19.8441 13.4699C19.6913 13.6227 19.4948 13.6882 19.3129 13.6882C18.9272 13.6882 18.5488 13.3898 18.5488 12.9241V11.0904C18.5488 10.6247 18.9345 10.3264 19.3129 10.3264C19.4948 10.3264 19.6985 10.3919 19.8441 10.5447L20.5135 11.1923C20.7318 11.396 20.8482 11.7017 20.8482 12Z" fill="currentColor"/>
+                            </svg>
+                        </div>
+                        <div class="footer-brand">
+                            <h3>Frame.io Comment Sync</h3>
+                            <p>Transforming video review workflows, one video at a time</p>
+                        </div>
+                    </div>
+                    
+                    <div class="footer-links">
+                        <div class="footer-column">
+                            <h4>Product</h4>
+                            <ul>
+                                <li><a href="#features">Features</a></li>
+                                <li><a href="#installation">Installation</a></li>
+                                <li><a href="#demo">Demo</a></li>
+                                <li><a href="https://github.com/cHAuHaNz/Frame.io-Comments-Sync" target="_blank" data-feature="source-code">Source Code</a></li>
+                            </ul>
+                        </div>
+                        
+                        <div class="footer-column">
+                            <h4>Support</h4>
+                            <ul>
+                                <li><a href="https://github.com/cHAuHaNz/Frame.io-Comments-Sync/issues" target="_blank">Report Issues</a></li>
+                                <li><a href="https://github.com/cHAuHaNz/Frame.io-Comments-Sync/discussions" target="_blank">Discussions</a></li>
+                                <li><a href="https://github.com/cHAuHaNz/Frame.io-Comments-Sync#readme" target="_blank">Documentation</a></li>
+                            </ul>
+                        </div>
+                        
+                        <div class="footer-column">
+                            <h4>Connect</h4>
+                            <ul>
+                                <li><a href="https://github.com/cHAuHaNz" target="_blank">GitHub</a></li>
+                                <li><a href="https://www.linkedin.com/in/amnd33p/" target="_blank">LinkedIn</a></li>
+                                <li><a href="https://twitter.com/cH4uHaN" target="_blank">Twitter</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="footer-bottom">
+                    <div class="footer-copyright">
+                        <p>&copy; 2024 Frame.io Comment Sync. Created with ❤️ by <a href="https://www.linkedin.com/in/amnd33p/" target="_blank">cHAuHaN</a></p>
+                    </div>
+                    <div class="footer-version">
+                        <span class="version-badge">v1.0</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="script.js"></script>
+</body>
+</html>

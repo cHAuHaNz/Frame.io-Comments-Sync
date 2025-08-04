@@ -1,0 +1,21 @@
+User-agent: *
+Allow: /
+
+# Sitemap location
+Sitemap: https://cHAuHaNz.github.io/Frame.io-Comments-Sync/sitemap.xml
+
+# Allow indexing of main pages
+Allow: /index.html
+Allow: /styles.css
+Allow: /script.js
+
+# Disallow extension files from crawling
+Disallow: /manifest.json
+Disallow: /content.js
+Disallow: /popup.js
+Disallow: /popup.html
+Disallow: /sw.js
+Disallow: /css/
+Disallow: /webfonts/
+Disallow: /finished.wav
+Disallow: /icon*.png

@@ -1,0 +1,45 @@
+# GitHub Pages Configuration for Frame.io Comment Sync
+title: "Frame.io Comment Sync"
+description: "Powerful Chrome extension that revolutionizes video review workflows by enabling bulk import of comments from CSV files directly into Frame.io video timelines."
+url: "https://cHAuHaNz.github.io"
+baseurl: "/Frame.io-Comments-Sync"
+
+# SEO settings
+author: "cHAuHaN"
+twitter:
+  username: cH4uHaN
+  card: summary_large_image
+
+# Social media
+social:
+  name: cHAuHaN
+  links:
+    - https://github.com/cHAuHaNz
+    - https://www.linkedin.com/in/amnd33p/
+    - https://twitter.com/cH4uHaN
+
+# GitHub Pages settings
+plugins:
+  - jekyll-seo-tag
+  - jekyll-sitemap
+
+# Exclude from processing
+exclude:
+  - README.md
+  - LICENSE
+
+# Include custom files
+include:
+  - _headers
+  - _redirects
+
+# Markdown settings
+markdown: kramdown
+highlighter: rouge
+kramdown:
+  input: GFM
+  hard_wrap: false
+
+# Build settings
+incremental: true
+safe: true
